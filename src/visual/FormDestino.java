@@ -1,0 +1,665 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package visual;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
+import modelo.ConverteDataWEB;
+import modelo.DAODestino;
+import modelo.Transportadora;
+import modelo.Funcionario;
+import modelo.DAOTransportadora;
+import modelo.DAOLoja_De_Destino;
+import modelo.Destino;
+import modelo.Loja_De_Destino;
+import modelo.DAOLoja_De_Destino;
+/**
+ *
+ * @author 11171009801
+ */
+public class FormDestino extends javax.swing.JDialog {
+    
+    DAODestino dao = new DAODestino();
+    DAOTransportadora daoTransportadora = new DAOTransportadora();
+    DAOLoja_De_Destino daoLojaDestino = new DAOLoja_De_Destino();
+    ConverteDataWEB data = new ConverteDataWEB();
+    String dataAtual = data.dataAtual();
+    public void atualizaTabela(){
+        listDestino.clear();
+        listDestino.addAll(dao.getLista());
+        int linha = listDestino.size()-1;
+        if(linha >= 0){
+            tblDestino.setRowSelectionInterval(linha, linha);
+            tblDestino.scrollRectToVisible
+            (tblDestino.getCellRect(linha, linha, true));
+                    
+            
+        }
+    }
+    
+    private void trataEdicao( boolean editando){
+        btnCancelar.setEnabled(editando);
+        btnSalvar.setEnabled(editando);
+        btnEditar.setEnabled(!editando);
+        int linha = listDestino.size()-1;
+        if(linha<0){
+            btnExcluir.setEnabled(false);
+            txtCodigo.setText("");
+            txtFrete.setText("");
+            txtValorEncomenda.setText("");
+        }else{
+            btnExcluir.setEnabled(!editando);
+        }
+        btnNovo.setEnabled(!editando);
+        btnFechar.setEnabled(!editando);
+        btnPrimeiro.setEnabled(!editando);
+        btnProximo.setEnabled(!editando);
+        btnAnterior.setEnabled(!editando);
+        btnUltimo.setEnabled(!editando);
+        
+        
+        tblDestino.setEnabled(editando);
+        txtDestino.setEnabled(editando);
+        
+        txtFrete.setEnabled(editando);
+        txtValorEncomenda.setEnabled(editando);
+        cbxTransportadora.setEnabled(editando);
+        cbxLojaDestino.setEnabled(editando);
+        
+      
+    }
+    
+ 
+
+// Restante do código...
+
+public boolean validaCampos() {
+    if (!(txtFrete.getText().length() > 0)) {
+        JOptionPane.showMessageDialog(null, "Informe o frete");
+        txtFrete.requestFocus();
+        return false;
+    }
+
+    if (!(txtValorEncomenda.getText().length() > 0)) {
+        JOptionPane.showMessageDialog(null, "Informe o valor da encomenda");
+        txtValorEncomenda.requestFocus();
+        return false;
+    }
+
+    if (!txtDestino.getText().isEmpty()) {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        sdf.setLenient(false);
+        try {
+            sdf.parse(txtDestino.getText());
+        } catch (ParseException e) {
+            JOptionPane.showMessageDialog(null, "Informe uma data de destino válida no formato dd/MM/yyyy");
+            txtDestino.requestFocus();
+            return false;
+        }
+    }
+
+    if (txtFrete.getText().length() > 0) {
+        try {
+            Double.parseDouble(txtFrete.getText());
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Informe somente números no frete");
+            txtFrete.requestFocus();
+            return false;
+        }
+        if (!(cbxTransportadora.getSelectedIndex() >= 0)) {
+            JOptionPane.showMessageDialog(null, "Informe a transportadora");
+            cbxTransportadora.requestFocus();
+            return false;
+        }
+        if (!(cbxLojaDestino.getSelectedIndex() >= 0)) {
+            JOptionPane.showMessageDialog(null, "Informe o destino");
+            cbxLojaDestino.requestFocus();
+            return false;
+        }
+
+        if (txtValorEncomenda.getText().length() > 0) {
+            try {
+                Double.parseDouble(txtValorEncomenda.getText());
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "Informe somente números no valor");
+                txtValorEncomenda.requestFocus();
+                return false;
+            }
+        }
+    }
+
+    return true;
+}
+
+    public FormDestino(java.awt.Frame parent, boolean modal) {
+        super(parent, modal);
+        initComponents();
+        
+        atualizaTabela();
+        trataEdicao(false);
+        listTrasportadora.clear();
+        listTrasportadora.addAll(daoTransportadora.getLista());
+        listLojaDestino.clear();
+        listLojaDestino.addAll(daoLojaDestino.getLista());
+        
+    }
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+        bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
+
+        listDestino = org.jdesktop.observablecollections.ObservableCollections.observableList(new ArrayList <Destino>());
+        listTrasportadora = org.jdesktop.observablecollections.ObservableCollections.observableList(new ArrayList <Transportadora>());
+        listLojaDestino = org.jdesktop.observablecollections.ObservableCollections.observableList(new ArrayList <Loja_De_Destino>());
+        converteData = new model.ConverteData();
+        PainelNavegacao = new javax.swing.JPanel();
+        btnPrimeiro = new javax.swing.JButton();
+        btnAnterior = new javax.swing.JButton();
+        btnProximo = new javax.swing.JButton();
+        btnUltimo = new javax.swing.JButton();
+        btnFechar = new javax.swing.JButton();
+        abas = new javax.swing.JTabbedPane();
+        abaListagem = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblDestino = new javax.swing.JTable();
+        abaDados = new javax.swing.JPanel();
+        painelAcoes = new javax.swing.JPanel();
+        btnNovo = new javax.swing.JButton();
+        btnEditar = new javax.swing.JButton();
+        btnCancelar = new javax.swing.JButton();
+        btnSalvar = new javax.swing.JButton();
+        btnExcluir = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        txtCodigo = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        txtFrete = new javax.swing.JTextField();
+        txtValorEncomenda = new javax.swing.JTextField();
+        cbxTransportadora = new javax.swing.JComboBox<>();
+        cbxLojaDestino = new javax.swing.JComboBox<>();
+        javax.swing.text.MaskFormatter maskData = null;
+        try{
+            maskData = new javax.swing.text.MaskFormatter("##/##/####");
+            maskData.setPlaceholderCharacter('_');
+        }catch(Exception e){
+            System.out.println("Erro na mascara"+e);
+        }
+        txtDestino = new javax.swing.JFormattedTextField(maskData);
+        jLabel4 = new javax.swing.JLabel();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Cadastro Destino");
+
+        PainelNavegacao.setBorder(javax.swing.BorderFactory.createTitledBorder("Navegação"));
+        PainelNavegacao.setLayout(new java.awt.GridLayout(1, 0));
+
+        btnPrimeiro.setText("Primeiro");
+        btnPrimeiro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPrimeiroActionPerformed(evt);
+            }
+        });
+        PainelNavegacao.add(btnPrimeiro);
+
+        btnAnterior.setText("Anterior");
+        btnAnterior.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAnteriorActionPerformed(evt);
+            }
+        });
+        PainelNavegacao.add(btnAnterior);
+
+        btnProximo.setText("Próximo");
+        btnProximo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnProximoActionPerformed(evt);
+            }
+        });
+        PainelNavegacao.add(btnProximo);
+
+        btnUltimo.setText("Último");
+        btnUltimo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUltimoActionPerformed(evt);
+            }
+        });
+        PainelNavegacao.add(btnUltimo);
+
+        btnFechar.setText("Fechar");
+        btnFechar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFecharActionPerformed(evt);
+            }
+        });
+        PainelNavegacao.add(btnFechar);
+
+        abaListagem.setLayout(new java.awt.BorderLayout());
+
+        org.jdesktop.swingbinding.JTableBinding jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, listDestino, tblDestino);
+        org.jdesktop.swingbinding.JTableBinding.ColumnBinding columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${loja_de_destino}"));
+        columnBinding.setColumnName("Loja_de_destino");
+        columnBinding.setColumnClass(modelo.Loja_De_Destino.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${transportadora}"));
+        columnBinding.setColumnName("Transportadora");
+        columnBinding.setColumnClass(modelo.Transportadora.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${valorEncomenda}"));
+        columnBinding.setColumnName("Valor Encomenda");
+        columnBinding.setColumnClass(Double.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${frete}"));
+        columnBinding.setColumnName("Frete");
+        columnBinding.setColumnClass(Double.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${codDestino}"));
+        columnBinding.setColumnName("Cod Destino");
+        columnBinding.setColumnClass(Integer.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${dataDestino}"));
+        columnBinding.setColumnName("Data Destino");
+        columnBinding.setColumnClass(java.util.Calendar.class);
+        bindingGroup.addBinding(jTableBinding);
+        jTableBinding.bind();
+
+        jScrollPane1.setViewportView(tblDestino);
+
+        abaListagem.add(jScrollPane1, java.awt.BorderLayout.CENTER);
+
+        abas.addTab("Listagem", abaListagem);
+
+        painelAcoes.setBorder(javax.swing.BorderFactory.createTitledBorder("Ações"));
+        painelAcoes.setLayout(new java.awt.GridLayout(1, 0));
+
+        btnNovo.setText("Novo");
+        btnNovo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNovoActionPerformed(evt);
+            }
+        });
+        painelAcoes.add(btnNovo);
+
+        btnEditar.setText("Editar");
+        btnEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarActionPerformed(evt);
+            }
+        });
+        painelAcoes.add(btnEditar);
+
+        btnCancelar.setText("Cancelar");
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
+        });
+        painelAcoes.add(btnCancelar);
+
+        btnSalvar.setText("Salvar");
+        btnSalvar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSalvarActionPerformed(evt);
+            }
+        });
+        painelAcoes.add(btnSalvar);
+
+        btnExcluir.setText("Excluir");
+        btnExcluir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExcluirActionPerformed(evt);
+            }
+        });
+        painelAcoes.add(btnExcluir);
+
+        jLabel1.setText("Código:");
+
+        txtCodigo.setEditable(false);
+
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, tblDestino, org.jdesktop.beansbinding.ELProperty.create("${selectedElement.codDestino}"), txtCodigo, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        txtCodigo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtCodigoActionPerformed(evt);
+            }
+        });
+
+        jLabel6.setText("Frete:");
+
+        jLabel7.setText("Valor Da Encomenda:");
+
+        jLabel8.setText("Transportadora:");
+
+        jLabel9.setText("Loja de Destino:");
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, tblDestino, org.jdesktop.beansbinding.ELProperty.create("${selectedElement.frete}"), txtFrete, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        txtFrete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtFreteActionPerformed(evt);
+            }
+        });
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, tblDestino, org.jdesktop.beansbinding.ELProperty.create("${selectedElement.valorEncomenda}"), txtValorEncomenda, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        org.jdesktop.swingbinding.JComboBoxBinding jComboBoxBinding = org.jdesktop.swingbinding.SwingBindings.createJComboBoxBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, listTrasportadora, cbxTransportadora);
+        bindingGroup.addBinding(jComboBoxBinding);
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, tblDestino, org.jdesktop.beansbinding.ELProperty.create("${selectedElement.transportadora}"), cbxTransportadora, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        bindingGroup.addBinding(binding);
+
+        jComboBoxBinding = org.jdesktop.swingbinding.SwingBindings.createJComboBoxBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, listLojaDestino, cbxLojaDestino);
+        bindingGroup.addBinding(jComboBoxBinding);
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, tblDestino, org.jdesktop.beansbinding.ELProperty.create("${selectedElement.loja_de_destino}"), cbxLojaDestino, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        bindingGroup.addBinding(binding);
+
+        txtDestino.setText("");
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, tblDestino, org.jdesktop.beansbinding.ELProperty.create("${selectedElement_IGNORE_ADJUSTING.dataDestino}"), txtDestino, org.jdesktop.beansbinding.BeanProperty.create("value"));
+        binding.setConverter(converteData);
+        bindingGroup.addBinding(binding);
+
+        txtDestino.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtDestinoActionPerformed(evt);
+            }
+        });
+
+        jLabel4.setText("Destino:");
+
+        javax.swing.GroupLayout abaDadosLayout = new javax.swing.GroupLayout(abaDados);
+        abaDados.setLayout(abaDadosLayout);
+        abaDadosLayout.setHorizontalGroup(
+            abaDadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(abaDadosLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(abaDadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(painelAcoes, javax.swing.GroupLayout.DEFAULT_SIZE, 524, Short.MAX_VALUE)
+                    .addGroup(abaDadosLayout.createSequentialGroup()
+                        .addComponent(jLabel7)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtValorEncomenda))
+                    .addGroup(abaDadosLayout.createSequentialGroup()
+                        .addComponent(jLabel6)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtFrete))
+                    .addGroup(abaDadosLayout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtCodigo))
+                    .addGroup(abaDadosLayout.createSequentialGroup()
+                        .addGroup(abaDadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(abaDadosLayout.createSequentialGroup()
+                                .addComponent(jLabel9)
+                                .addGap(18, 18, 18)
+                                .addComponent(cbxLojaDestino, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(abaDadosLayout.createSequentialGroup()
+                                .addComponent(jLabel8)
+                                .addGap(18, 18, 18)
+                                .addComponent(cbxTransportadora, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(abaDadosLayout.createSequentialGroup()
+                                .addComponent(jLabel4)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(txtDestino, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        abaDadosLayout.setVerticalGroup(
+            abaDadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(abaDadosLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(painelAcoes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 73, Short.MAX_VALUE)
+                .addGroup(abaDadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(txtDestino, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(abaDadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(txtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(abaDadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(txtFrete, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(abaDadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(txtValorEncomenda, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(abaDadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel8)
+                    .addComponent(cbxTransportadora, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(abaDadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel9, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(cbxLojaDestino, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
+        );
+
+        abas.addTab("Cadastro", abaDados);
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(PainelNavegacao, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(abas)
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(PainelNavegacao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(abas, javax.swing.GroupLayout.PREFERRED_SIZE, 372, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        getAccessibleContext().setAccessibleName("Cadastro Desino");
+
+        bindingGroup.bind();
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void btnFecharActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFecharActionPerformed
+        // TODO add your handling code here:
+        dispose();
+    }//GEN-LAST:event_btnFecharActionPerformed
+
+    private void btnNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovoActionPerformed
+        // TODO add your handling code here:
+        listDestino.add((Destino) new Destino());
+        int linha = listDestino.size()-1;
+        tblDestino.setRowSelectionInterval(linha, linha);
+        txtFrete.requestFocus();
+        trataEdicao(true);
+    }//GEN-LAST:event_btnNovoActionPerformed
+
+    private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
+        // TODO add your handling code here:
+        if(validaCampos()){
+        int linhaSelecionada = tblDestino.getSelectedRow();
+        Destino obj = listDestino.get(linhaSelecionada);
+        dao.salvar(obj);
+        atualizaTabela();
+        trataEdicao(false);
+        }
+    }//GEN-LAST:event_btnSalvarActionPerformed
+
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+        // TODO add your handling code here:
+        trataEdicao(true);
+        txtFrete.requestFocus();
+    }//GEN-LAST:event_btnEditarActionPerformed
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        // TODO add your handling code here:
+        trataEdicao(false);
+        atualizaTabela();
+    }//GEN-LAST:event_btnCancelarActionPerformed
+
+    private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
+        // TODO add your handling code here:
+        int opcao = JOptionPane.showOptionDialog(null,"Confirma Exclusão?",
+                "Pergunta", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,
+                null, new String[]{"Sim","Não"},"Sim");
+        
+        if(opcao==0){
+            int linhaSelecionada = tblDestino.getSelectedRow();
+            Destino obj = listDestino.get(linhaSelecionada);
+            dao.remover(obj);
+            atualizaTabela();
+            trataEdicao(false);
+        }
+        
+    }//GEN-LAST:event_btnExcluirActionPerformed
+
+    private void btnPrimeiroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrimeiroActionPerformed
+        // TODO add your handling code here:
+        tblDestino.setRowSelectionInterval(0, 0);
+        tblDestino.scrollRectToVisible(tblDestino.getCellRect(0, 0, true));
+        
+    }//GEN-LAST:event_btnPrimeiroActionPerformed
+
+    private void btnAnteriorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnteriorActionPerformed
+        // TODO add your handling code here:
+        int linha = tblDestino.getSelectedRow();
+        if((linha-1)>=0){
+            linha--;
+        }
+        tblDestino.setRowSelectionInterval(linha, linha);
+        tblDestino.scrollRectToVisible(tblDestino.getCellRect(linha, 0, true));
+    }//GEN-LAST:event_btnAnteriorActionPerformed
+
+    private void btnProximoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProximoActionPerformed
+        // TODO add your handling code here:
+        int linha = tblDestino.getSelectedRow();
+        if((linha+1)<= tblDestino.getRowCount()-1){
+            linha++;
+        }
+        tblDestino.setRowSelectionInterval(linha, linha);
+        tblDestino.scrollRectToVisible(tblDestino.getCellRect(linha, 0, true));
+    }//GEN-LAST:event_btnProximoActionPerformed
+
+    private void btnUltimoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUltimoActionPerformed
+        // TODO add your handling code here:
+        int linha = tblDestino.getRowCount()-1;
+        tblDestino.setRowSelectionInterval(linha, linha);
+        tblDestino.scrollRectToVisible(tblDestino.getCellRect(linha, 0, true));
+        
+    }//GEN-LAST:event_btnUltimoActionPerformed
+
+    private void txtCodigoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCodigoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCodigoActionPerformed
+
+    private void txtFreteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFreteActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtFreteActionPerformed
+
+    private void txtDestinoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDestinoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtDestinoActionPerformed
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(FormDestino.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(FormDestino.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(FormDestino.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(FormDestino.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+
+        /* Create and display the dialog */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                FormDestino dialog = new FormDestino(new javax.swing.JFrame(), true);
+                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+                    @Override
+                    public void windowClosing(java.awt.event.WindowEvent e) {
+                        System.exit(0);
+                    }
+                });
+                dialog.setVisible(true);
+            }
+        });
+    }
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel PainelNavegacao;
+    private javax.swing.JPanel abaDados;
+    private javax.swing.JPanel abaListagem;
+    private javax.swing.JTabbedPane abas;
+    private javax.swing.JButton btnAnterior;
+    private javax.swing.JButton btnCancelar;
+    private javax.swing.JButton btnEditar;
+    private javax.swing.JButton btnExcluir;
+    private javax.swing.JButton btnFechar;
+    private javax.swing.JButton btnNovo;
+    private javax.swing.JButton btnPrimeiro;
+    private javax.swing.JButton btnProximo;
+    private javax.swing.JButton btnSalvar;
+    private javax.swing.JButton btnUltimo;
+    private javax.swing.JComboBox<String> cbxLojaDestino;
+    private javax.swing.JComboBox<String> cbxTransportadora;
+    private model.ConverteData converteData;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JScrollPane jScrollPane1;
+    private java.util.List<Destino> listDestino;
+    private java.util.List<Loja_De_Destino> listLojaDestino;
+    private java.util.List<Transportadora> listTrasportadora;
+    private javax.swing.JPanel painelAcoes;
+    private javax.swing.JTable tblDestino;
+    private javax.swing.JTextField txtCodigo;
+    private javax.swing.JFormattedTextField txtDestino;
+    private javax.swing.JTextField txtFrete;
+    private javax.swing.JTextField txtValorEncomenda;
+    private org.jdesktop.beansbinding.BindingGroup bindingGroup;
+    // End of variables declaration//GEN-END:variables
+}
